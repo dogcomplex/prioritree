@@ -1,0 +1,60 @@
+
+WHAT IF:
+	$resource->__get('__array')
+		$array = $root->context('__array')
+		NO saved Get object required.  singleton could run it all...
+		BUT how do we change context well?
+	
+	$context = '/bootstrap'
+	$resource1 = new Service('resource1');
+		$old_context = $root->context;
+		$root->context = '/service' // atuomatic from namespace
+		// do construct:
+			// /Service class now calls $service = &\Root::get('resource1')
+				$old_context = $root->context;
+				$root->context = '/get'
+					// do  /get($key='resource1')
+						gets $root->context->__array[$key][__service]
+						else gets $root->context->__array[__extend]
+						else gets $root->context->__array[__alias]
+						// OR: 
+							$old_context = $root->context,
+							sets $root->context = './'.$key,
+							// its __array automatically pulls from there
+							// has to pass on __extend and __alias though, right?
+							// doesnt have to care about __key and __parent tho since context=__path is always there
+							// context could probably internally track __extend and __alias in parent contexts
+								// note: should never be able to reach one context without reaching parent first
+								// i.e. context would need to rebuild the tree, of all accessed keys so far (fair!)
+							$root->context = $old_context,
+				$root->context = $old_context;
+		$root->context = $old_context;
+		return $service // context unchanged since just returning not calling anything
+			// i.e. context only changes on function calls
+	// MINIMUM for this to work:  $resource1 = class Pointer{ $context = '/resource1'; }
+		// would then call $root->getContext('/resource1') to return the object;
+		// still needs to do that for every __get, __set, __clone, __invoke, etc.
+
+	$x = $resource1();
+		$old_context = $root->context; // /bootstrap
+		$root->context = /resource1  // how do we know this?
+			// KNOW FROM.... hmmm...
+
+		// do function
+			// $old_context = $root->context; // /resource1
+			// $root->context = /resource1/__function  // necessary?
+				// run closure, doesnt necessarily update context (but might!)
+			// $root->context = $old_context; // /resource1
+		$root->context = $old_context; // /bootstrap
+	
+	$x; // no context change, just returns the pointer object
+	$y = $x; // hmmm... just copies the pointer, no context change
+	$z = clone $x;
+		// calls $x->__clone()
+			$old_context = $root->context // /bootstrap
+			$root->context = $this->context;
+				// do clone
+			$root->context = $old_context; // /bootstrap
+
+
+	$z->$key;

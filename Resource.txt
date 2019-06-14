@@ -1,0 +1,8 @@
+
+A Resource can refer to the string, array or object representation of a resource in the system.
+	As such, any "Resource" class would probably be abstract(?) 
+This is distinct from a Service, which is always the object representation of a resource. 
+
+$value = Resource::of($value) might be a way to validate that $value is in fact a string, array or object pointer to a valid resource.  (or null, if invalid)
+
+whereas $value = Service::of($value) would always return an object (or possibly null, if invalid)
