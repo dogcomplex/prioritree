@@ -1,7 +1,7 @@
 # PrioriTree
 WIP Tinkering of a language-agnostic config-based HMVC REST API CMS that uses lazy config merging as its main way of handling complexity. 
 
-Implemented here in PHP, but meant to use the same namespace and config data across a wide variety of contexts (URL, .env, DB, code, Request, Response, configs, files, etc).  Each module and folder is meant to be self-encapsulated, defined only by itself and its children (who are likewise defined). Any endpoint can be defined with the following levels of complexity and interpretted (lazily) by the compiler: 
+Implemented here in PHP, but meant to use the same namespace and config data across a wide variety of contexts (URL, .env, DB, frontend, backend, Request, Response, configs, files, etc).  Each module and folder is meant to be self-encapsulated, defined only by itself and its children (who are likewise defined). Any endpoint can be defined with the following levels of complexity and interpretted (lazily) by the compiler: 
   - `__value`: single value (string, int, function, array, etc), e.g. `$some->endpoint->__value = "Some value"` 
   - `__array`: a directory of sub-values, with `__value` key reserved for invoking self e.g. $some->endpoint = [ '__value' => "Some value", 'name' => "Some Endpoint"].  Numerical arrays, and simple types may be auto-interpretted as `__value`s.
   - `__function`: a function that is auto-called by the compiler, with its params as child endpoints (sharing named and indexed aliases) and return value as `__value` keyword. e.g. 
