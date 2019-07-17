@@ -1,5 +1,5 @@
 <?php
-// hello!
+
 error_reporting(E_ALL);
 define('ROOT_DIR', __DIR__.'/');
 define('ROOT_FOLDER', ROOT_DIR);  // TODO remove
